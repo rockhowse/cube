@@ -54,9 +54,10 @@ public:
     void drawCubeGeometry(QGLShaderProgram *program);
 
 private:
-    void initCubeGeometry();
+    static const int num_cubes = 2;
+    void initCubeGeometry(int num_cube, float cube_offset_y);
 
-    GLuint vboIds[2];
+    GLuint vboIds[2*num_cubes];
 };
 
 #endif // GEOMETRYENGINE_H

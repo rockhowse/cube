@@ -64,55 +64,58 @@ void GeometryEngine::init()
 
 //! [0]
     // Generate 2 VBOs
-    glGenBuffers(2, vboIds);
+    glGenBuffers(num_cubes*2, vboIds);
 
 //! [0]
 
-    // Initializes cube geometry and transfers it to VBOs
-    initCubeGeometry();
+    for(int i = 0; i < num_cubes; i++) {
+        // Initializes cube geometry and transfers it to VBOs
+        initCubeGeometry(i, float(i)*2.0f);
+    }
 }
 
-void GeometryEngine::initCubeGeometry()
+void GeometryEngine::initCubeGeometry(int num_cube, float cube_offset_y)
 {
+
     // For cube we would need only 8 vertices but we have to
     // duplicate vertex for each face because texture coordinate
     // is different.
     VertexData vertices[] = {
         // Vertex data for face 0
-        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(0.0f, 0.0f)},  // v0
-        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D(0.33f, 0.0f)}, // v1
-        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(0.0f, 0.5f)},  // v2
-        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(0.33f, 0.5f)}, // v3
+        {QVector3D(-1.0f, -1.0f+cube_offset_y,  1.0f), QVector2D(0.0f, 0.0f)},  // v0
+        {QVector3D( 1.0f, -1.0f+cube_offset_y,  1.0f), QVector2D(0.33f, 0.0f)}, // v1
+        {QVector3D(-1.0f,  1.0f+cube_offset_y,  1.0f), QVector2D(0.0f, 0.5f)},  // v2
+        {QVector3D( 1.0f,  1.0f+cube_offset_y,  1.0f), QVector2D(0.33f, 0.5f)}, // v3
 
         // Vertex data for face 1
-        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D( 0.0f, 0.5f)}, // v4
-        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(0.33f, 0.5f)}, // v5
-        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(0.0f, 1.0f)},  // v6
-        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(0.33f, 1.0f)}, // v7
+        {QVector3D( 1.0f, -1.0f+cube_offset_y,  1.0f), QVector2D( 0.0f, 0.5f)}, // v4
+        {QVector3D( 1.0f, -1.0f+cube_offset_y, -1.0f), QVector2D(0.33f, 0.5f)}, // v5
+        {QVector3D( 1.0f,  1.0f+cube_offset_y,  1.0f), QVector2D(0.0f, 1.0f)},  // v6
+        {QVector3D( 1.0f,  1.0f+cube_offset_y, -1.0f), QVector2D(0.33f, 1.0f)}, // v7
 
         // Vertex data for face 2
-        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(0.66f, 0.5f)}, // v8
-        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(1.0f, 0.5f)},  // v9
-        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(0.66f, 1.0f)}, // v10
-        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(1.0f, 1.0f)},  // v11
+        {QVector3D( 1.0f, -1.0f+cube_offset_y, -1.0f), QVector2D(0.66f, 0.5f)}, // v8
+        {QVector3D(-1.0f, -1.0f+cube_offset_y, -1.0f), QVector2D(1.0f, 0.5f)},  // v9
+        {QVector3D( 1.0f,  1.0f+cube_offset_y, -1.0f), QVector2D(0.66f, 1.0f)}, // v10
+        {QVector3D(-1.0f,  1.0f+cube_offset_y, -1.0f), QVector2D(1.0f, 1.0f)},  // v11
 
         // Vertex data for face 3
-        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(0.66f, 0.0f)}, // v12
-        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(1.0f, 0.0f)},  // v13
-        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(0.66f, 0.5f)}, // v14
-        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(1.0f, 0.5f)},  // v15
+        {QVector3D(-1.0f, -1.0f+cube_offset_y, -1.0f), QVector2D(0.66f, 0.0f)}, // v12
+        {QVector3D(-1.0f, -1.0f+cube_offset_y,  1.0f), QVector2D(1.0f, 0.0f)},  // v13
+        {QVector3D(-1.0f,  1.0f+cube_offset_y, -1.0f), QVector2D(0.66f, 0.5f)}, // v14
+        {QVector3D(-1.0f,  1.0f+cube_offset_y,  1.0f), QVector2D(1.0f, 0.5f)},  // v15
 
         // Vertex data for face 4
-        {QVector3D(-1.0f, -1.0f, -1.0f), QVector2D(0.33f, 0.0f)}, // v16
-        {QVector3D( 1.0f, -1.0f, -1.0f), QVector2D(0.66f, 0.0f)}, // v17
-        {QVector3D(-1.0f, -1.0f,  1.0f), QVector2D(0.33f, 0.5f)}, // v18
-        {QVector3D( 1.0f, -1.0f,  1.0f), QVector2D(0.66f, 0.5f)}, // v19
+        {QVector3D(-1.0f, -1.0f+cube_offset_y, -1.0f), QVector2D(0.33f, 0.0f)}, // v16
+        {QVector3D( 1.0f, -1.0f+cube_offset_y, -1.0f), QVector2D(0.66f, 0.0f)}, // v17
+        {QVector3D(-1.0f, -1.0f+cube_offset_y,  1.0f), QVector2D(0.33f, 0.5f)}, // v18
+        {QVector3D( 1.0f, -1.0f+cube_offset_y,  1.0f), QVector2D(0.66f, 0.5f)}, // v19
 
         // Vertex data for face 5
-        {QVector3D(-1.0f,  1.0f,  1.0f), QVector2D(0.33f, 0.5f)}, // v20
-        {QVector3D( 1.0f,  1.0f,  1.0f), QVector2D(0.66f, 0.5f)}, // v21
-        {QVector3D(-1.0f,  1.0f, -1.0f), QVector2D(0.33f, 1.0f)}, // v22
-        {QVector3D( 1.0f,  1.0f, -1.0f), QVector2D(0.66f, 1.0f)}  // v23
+        {QVector3D(-1.0f,  1.0f+cube_offset_y,  1.0f), QVector2D(0.33f, 0.5f)}, // v20
+        {QVector3D( 1.0f,  1.0f+cube_offset_y,  1.0f), QVector2D(0.66f, 0.5f)}, // v21
+        {QVector3D(-1.0f,  1.0f+cube_offset_y, -1.0f), QVector2D(0.33f, 1.0f)}, // v22
+        {QVector3D( 1.0f,  1.0f+cube_offset_y, -1.0f), QVector2D(0.66f, 1.0f)}  // v23
     };
 
     // Indices for drawing cube faces using triangle strips.
@@ -133,11 +136,11 @@ void GeometryEngine::initCubeGeometry()
 
 //! [1]
     // Transfer vertex data to VBO 0
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, vboIds[num_cube*2]);
     glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(VertexData), vertices, GL_STATIC_DRAW);
 
     // Transfer index data to VBO 1
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[(num_cube*2)+1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 34 * sizeof(GLushort), indices, GL_STATIC_DRAW);
 //! [1]
 }
@@ -145,27 +148,29 @@ void GeometryEngine::initCubeGeometry()
 //! [2]
 void GeometryEngine::drawCubeGeometry(QGLShaderProgram *program)
 {
-    // Tell OpenGL which VBOs to use
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
+    for(int i = 0; i < num_cubes; i++) {
+        // Tell OpenGL which VBOs to use
+        glBindBuffer(GL_ARRAY_BUFFER, vboIds[i*2]);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[(i*2)+1]);
 
-    // Offset for position
-    quintptr offset = 0;
+        // Offset for position
+        quintptr offset = 0;
 
-    // Tell OpenGL programmable pipeline how to locate vertex position data
-    int vertexLocation = program->attributeLocation("a_position");
-    program->enableAttributeArray(vertexLocation);
-    glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offset);
+        // Tell OpenGL programmable pipeline how to locate vertex position data
+        int vertexLocation = program->attributeLocation("a_position");
+        program->enableAttributeArray(vertexLocation);
+        glVertexAttribPointer(vertexLocation, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offset);
 
-    // Offset for texture coordinate
-    offset += sizeof(QVector3D);
+        // Offset for texture coordinate
+        offset += sizeof(QVector3D);
 
-    // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
-    int texcoordLocation = program->attributeLocation("a_texcoord");
-    program->enableAttributeArray(texcoordLocation);
-    glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offset);
+        // Tell OpenGL programmable pipeline how to locate vertex texture coordinate data
+        int texcoordLocation = program->attributeLocation("a_texcoord");
+        program->enableAttributeArray(texcoordLocation);
+        glVertexAttribPointer(texcoordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offset);
 
-    // Draw cube geometry using indices from VBO 1
-    glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_SHORT, 0);
+        // Draw cube geometry using indices from VBO 1
+        glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_SHORT, 0);
+    }
 }
 //! [2]
